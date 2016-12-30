@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import controller.Controller;
+import exceptions.ControllerException;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -19,8 +21,7 @@ public class LoginPanel  extends JPanel
 {
 	
 	private Controller controller;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField txtLogin,txtPassword;
 	private JLabel lblLogin;
 	private JLabel lblPassword;
 	private JButton btnConfirm;
@@ -42,15 +43,15 @@ public class LoginPanel  extends JPanel
 		lblPassword.setBounds(56, 160, 75, 14);
 		add(lblPassword);
 		
-		textField = new JTextField();
-		textField.setBounds(141, 96, 127, 20);
-		add(textField);
-		textField.setColumns(10);
+		txtLogin = new JTextField();
+		txtLogin.setBounds(141, 96, 127, 20);
+		add(txtLogin);
+		txtLogin.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(141, 157, 127, 20);
-		add(textField_1);
-		textField_1.setColumns(10);
+		txtPassword = new JTextField();
+		txtPassword.setBounds(141, 157, 127, 20);
+		add(txtPassword);
+		txtPassword.setColumns(10);
 		
 		btnConfirm = new JButton("Confirm");
 		btnConfirm.setBounds(141, 207, 89, 23);
@@ -67,15 +68,21 @@ public class LoginPanel  extends JPanel
 	{
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String login = textField.getText();
-				String password = textField_1.getText();
-				controller.checkLogin(login,password);
+				String login = txtLogin.getText();
+				String password = txtPassword.getText();
+				try {
+					controller.checkLogin(login,password);
+				} catch (ControllerException e1) {
+					lblLogInPlease.setText(e1.getMessage()+", try once again");
+				}
 			}
 		});
 	};
 	
-	public void unsuccessfulLogin(String information)
+	public void reset()
 	{
-		lblLogInPlease.setText(information+", try once again");
+		txtLogin.setText("");
+		txtPassword.setText("");
 	}
+	
 }

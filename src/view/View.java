@@ -8,6 +8,14 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import controller.Controller;
+import model.DataStorage;
+import model.User;
+import userView.DataStorageInfoPanel;
+import userView.DataStorageModifyPanel;
+import userView.UserPanel;
+import view.adminView.AdminPanel;
+import view.adminView.UserInfoPanel;
+import view.adminView.UserModifyPanel;
 
 public class View
 {
@@ -16,11 +24,14 @@ public class View
 	private Controller controller;
 	
 	private JFrame frame;
-	JPanel contentPanel;
-	LoginPanel loginPanel;
-	AdminPanel adminPanel;
-	UserModifyPanel userModifyPanel;
-	UserInfoPanel userInfoPanel;
+	private JPanel contentPanel;
+	private LoginPanel loginPanel;
+	private AdminPanel adminPanel;
+	private UserModifyPanel userModifyPanel;
+	private UserInfoPanel userInfoPanel;
+	private UserPanel userPanel;
+	private DataStorageInfoPanel dataStorageInfoPanel;
+	private DataStorageModifyPanel dataStorageModifyPanel;
 	
 	CardLayout cardLayout;
 	
@@ -50,13 +61,20 @@ public class View
 		adminPanel = new AdminPanel(WIDTH,HEIGHT,controller);
 		userModifyPanel = new UserModifyPanel(WIDTH,HEIGHT,controller);
 		userInfoPanel = new UserInfoPanel(WIDTH,HEIGHT,controller);
+		userPanel = new UserPanel(WIDTH,HEIGHT,controller);
+		dataStorageInfoPanel = new DataStorageInfoPanel(WIDTH,HEIGHT,controller);
+		dataStorageModifyPanel = new DataStorageModifyPanel(WIDTH,HEIGHT,controller);
 		
 		contentPanel.add(loginPanel,loginPanel.getName());
 		contentPanel.add(adminPanel,adminPanel.getName());
 		contentPanel.add(userModifyPanel,userModifyPanel.getName());
 		contentPanel.add(userInfoPanel,userInfoPanel.getName());
-		
-		cardLayout.show(contentPanel, "Admin");
+		contentPanel.add(userPanel,userPanel.getName());
+		contentPanel.add(dataStorageInfoPanel,dataStorageInfoPanel.getName());
+		contentPanel.add(dataStorageModifyPanel,dataStorageModifyPanel.getName());
+	
+		//cardLayout.show(contentPanel, "Admin");
+		cardLayout.show(contentPanel, "User");
 		frame.pack();
 	}
 	
@@ -65,10 +83,16 @@ public class View
 		
 		loginPanel.setupListeners();
 		adminPanel.setupListeners();
+		userModifyPanel.setupListeners();
+		userInfoPanel.setupListeners();
+		userPanel.setupListeners();
+		dataStorageInfoPanel.setupListeners();
+		dataStorageModifyPanel.setupListeners();
 	}
 	
 	public void showLoginPanel()
 	{
+		loginPanel.reset();
 		cardLayout.show(contentPanel, loginPanel.getName());
 	}
 	
@@ -83,28 +107,50 @@ public class View
 		cardLayout.show(contentPanel, adminPanel.getName());
 	}
 	
-	public void unsuccessfulLogin(String information)
-	{
-		loginPanel.unsuccessfulLogin(information);
-		showLoginPanel();
-	}
+	
 	public void successfulUserLogin()
 	{
-		//cardLayout.show(contentPanel, userModifyPanel.getName());
+		showUserPanel();
 	}
 	
 	public void showUserPanel()
 	{
-		//cardLayout.show(contentPanel, adminPanel.getName());
+		cardLayout.show(contentPanel, userPanel.getName());
 	}
 	
 	public void showUserModifyPanel()
 	{
+		userModifyPanel.resetVariables();
 		cardLayout.show(contentPanel, userModifyPanel.getName());
 	}
 	
-	public void showUserInfoPanel()
+	public void showUserModifyPanel(User user)
 	{
+		userModifyPanel.setVariables(user);
+		cardLayout.show(contentPanel, userModifyPanel.getName());
+	}
+	
+	public void showUserInfoPanel(User user)
+	{
+		userInfoPanel.setUserInfo(user);
 		cardLayout.show(contentPanel, userInfoPanel.getName());
+	}
+	
+	public void showDataStorageInfoPanel(DataStorage dataStorage)
+	{
+		dataStorageInfoPanel.setDataStorageInfo(dataStorage);
+		cardLayout.show(contentPanel, dataStorageInfoPanel.getName());
+	}
+	
+	public void showDataStorageModifyPanel()
+	{
+		dataStorageModifyPanel.resetVariables();
+		cardLayout.show(contentPanel, dataStorageModifyPanel.getName());
+	}
+	
+	public void showDataStorageModifyPanel(DataStorage dataStorage)
+	{
+		dataStorageModifyPanel.setVariables(dataStorage);
+		cardLayout.show(contentPanel, dataStorageModifyPanel.getName());
 	}
 }

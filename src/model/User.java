@@ -13,7 +13,12 @@ public class User
 	private String login;
 	private String password;
 	boolean admin;
-	
+	public User(String login,String password,boolean admin)
+	{
+		this.login = login;
+		this.password = password;
+		this.admin = admin;
+	}
 	public String toString()
 	{
 		return id +" "+ login;

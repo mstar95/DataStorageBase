@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import dao.GenericDaoImpl;
+import exceptions.DaoException;
 
 public abstract class GenericDaoImpl<E > implements GenericDao<E> 
 {
@@ -116,6 +117,13 @@ public abstract class GenericDaoImpl<E > implements GenericDao<E>
     	if(dataLoaded)
     	{
     		openFiletoWrite();
+    		String json = gson.toJson(map);
+    		try {
+				writer.write(json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		closeFile();
     	}
     }
@@ -148,9 +156,13 @@ public abstract class GenericDaoImpl<E > implements GenericDao<E>
 	    	{
 	    		writer.flush();
 	    		writer.close();
+	    		writer = null;
 	    	}
 	    	if(writer != null)
+	    	{
 	    		reader.close();
+	    		reader = null;
+	    	}
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

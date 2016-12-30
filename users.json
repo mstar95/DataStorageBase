@@ -4,5 +4,17 @@
     "login": "Admin",
     "password": "Haslo",
     "admin": true
+  },
+  "1": {
+    "id": 1,
+    "login": "pajac",
+    "password": "XD",
+    "admin": false
+  },
+  "2": {
+    "id": 2,
+    "login": "misio",
+    "password": "pysio",
+    "admin": false
   }
 }

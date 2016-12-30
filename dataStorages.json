@@ -1,0 +1,15 @@
+{
+  "0": {
+    "id": 0,
+    "title": "XD",
+    "memoryCapacity": {
+      "amount": 976.5625,
+      "unit": "KB"
+    },
+    "memoryUsed": {
+      "amount": 0.0,
+      "unit": "B"
+    },
+    "type": "CD"
+  }
+}

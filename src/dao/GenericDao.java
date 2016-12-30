@@ -2,6 +2,7 @@ package dao;
 
 import java.util.Map;
 
+import exceptions.DaoException;
 import model.User;
 
 public interface GenericDao<E> 

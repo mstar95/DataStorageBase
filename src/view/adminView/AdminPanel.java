@@ -1,4 +1,4 @@
-package view;
+package view.adminView;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
 import controller.Controller;
+import exceptions.DaoException;
 import model.User;
 
 import javax.swing.JLabel;
@@ -34,10 +35,10 @@ public class AdminPanel extends JPanel implements ListSelectionListener
 	private DefaultListModel<User> listModel;
 	
 	private JLabel lblNewLabel;
-	private JButton btnNewUser, btnDeleteUser,btnUserInfo;
+	private JButton btnNewUser, btnDeleteUser,btnUserInfo,btnLogout,btnModifyUser;
 	private JList list;
-	private JButton btnNewButton;
-	private JButton btnModifyUser;
+	private JLabel lblInfo;
+
 	public AdminPanel(int width,int height,Controller c)
 	{
 		controller = c;
@@ -70,13 +71,18 @@ public class AdminPanel extends JPanel implements ListSelectionListener
 		updateList();
 		add(list);
 		
-		btnNewButton = new JButton("Logout");
-		btnNewButton.setBounds(121, 369, 106, 23);
-		add(btnNewButton);
+		btnLogout = new JButton("Logout");
+		btnLogout.setBounds(121, 369, 106, 23);
+		add(btnLogout);
 		
 		btnModifyUser = new JButton("Modify User");
 		btnModifyUser.setBounds(237, 335, 121, 23);
 		add(btnModifyUser);
+		
+		lblInfo = new JLabel("");
+		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInfo.setBounds(43, 310, 260, 14);
+		add(lblInfo);
 	}
 	
 	public void setupListeners()
@@ -89,14 +95,59 @@ public class AdminPanel extends JPanel implements ListSelectionListener
 		
 		btnDeleteUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if()
+				if(checkIfValueIsSelected() == false)
+					return;
+				User user = (User)list.getSelectedValue();
+				if(user.isAdmin())
+					lblInfo.setText("Admin is protected");
+				else
+				{
+					try {
+						controller.deleteUser(user);
+						updateList();
+					} catch (DaoException e1) {
+						lblInfo.setText(e1.getMessage());
+					}
+				}
+					
 			}
 		});
+		
+		btnUserInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkIfValueIsSelected() == false)
+					return;
+				User user = (User)list.getSelectedValue();
+				controller.getView().showUserInfoPanel(user);
+			}
+		});
+		
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.getView().showLoginPanel();
+			}
+		});
+		
+		btnModifyUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkIfValueIsSelected() == false)
+					return;
+				User user = (User)list.getSelectedValue();
+				if(user.isAdmin())
+					lblInfo.setText("Admin is protected");
+				else
+				{
+				controller.getView().showUserModifyPanel(user);
+				}
+			}
+		});
+		
 	};
 	
 	public void updateList()
 	{
 		users = controller.getUsers();
+		listModel.clear();
 		for(Entry<Integer, User> entry : users.entrySet())
 		{
 			int index = list.getSelectedIndex(); //get selected index
@@ -110,11 +161,31 @@ public class AdminPanel extends JPanel implements ListSelectionListener
 			list.ensureIndexIsVisible(index);
 		}
 	}
-
+	
+	public boolean checkIfValueIsSelected()
+	{
+		if( list.getSelectedValue() == null)
+		{
+			lblInfo.setText("Select Object, please");
+			return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
-		
+	    if (e.getValueIsAdjusting() == false) {
+
+	        if (list.getSelectedIndex() == -1) {
+	        //No selection, disable fire button.
+	           // fireButton.setEnabled(false);
+
+	        } else {
+	        //Selection, enable the fire button.
+	           // fireButton.setEnabled(true);
+	        }
+	    }
 	}
+	
 	
 }
