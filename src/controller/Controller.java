@@ -11,6 +11,7 @@ import dao.UserDaoImpl;
 import exceptions.DaoException;
 import exceptions.ControllerException;
 import lombok.Getter;
+import model.Data;
 import model.DataStorage;
 import model.User;
 import view.View;
@@ -22,18 +23,21 @@ public class Controller
 	
 	private UserController userController;
 	private DataStorageController dataStorageController;
+	private DataController dataController;
 
 	public Controller()
 	{
 		userController = new UserController();
 		dataStorageController = new DataStorageController();
+		dataController = new DataController();
 	}
 	
 	public void setView(View view)
 	{
 		this.view = view;
 		userController.setView(view);
-		userController.setView(view);
+		dataStorageController.setView(view);
+		dataController.setView(view);
 	}
 	
 	public void checkLogin(String Login,String Password) throws ControllerException
@@ -81,4 +85,34 @@ public class Controller
 		dataStorageController.deleteDataStorage(dataStorage);
 	}
 	
+	
+	public Map<Integer,Data> getDatas()
+	{
+		return dataController.getDatas();
+	}
+	
+	public Map<Integer,Data> getByDataStorage(DataStorage dataStorage)
+	{
+		return dataController.getByDataStorage(dataStorage);
+	}
+	
+	public void addData(Data data) throws ControllerException, DaoException
+	{
+		dataController.addData(data);
+	}
+	
+	public void updateData(Data data) throws ControllerException, DaoException
+	{
+		dataController.updateData(data);
+	}
+	
+	public void deleteData(Data data) throws DaoException
+	{
+		dataController.deleteData(data);
+	}
+	
+	public void clearDataStorage(DataStorage dataStorage)
+	{
+		dataController.clearDataStorage(dataStorage);
+	}
 }

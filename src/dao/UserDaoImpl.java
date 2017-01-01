@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gson.reflect.TypeToken;
 
+import exceptions.DaoException;
 import model.User;
 
 public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao
@@ -18,14 +19,14 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao
 	}
 
 	@Override
-	public void add(User entity) throws Exception 
+	public void add(User entity) throws DaoException 
 	{
 		add(entity.getId(),entity);
 		
 	}
 
 	@Override
-	public void update(User entity) throws Exception {
+	public void update(User entity) throws DaoException {
 		update(entity.getId(),entity);	
 	}
 	

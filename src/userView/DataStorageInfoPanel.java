@@ -107,7 +107,7 @@ public class DataStorageInfoPanel extends JPanel
 				
 				try {
 					controller.deleteDataStorage(dataStorage);
-					controller.getView().showAdminPanel();
+					controller.getView().showUserPanel();
 				} catch (DaoException e1) {
 					lblInfo.setText(e1.getMessage());
 					}
@@ -118,14 +118,14 @@ public class DataStorageInfoPanel extends JPanel
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-			controller.getView().showDataStorageInfoPanel(dataStorage);
+			controller.getView().showDataStorageModifyPanel(dataStorage);
 				
 			}
 		});
 		
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.getView().showAdminPanel();
+				controller.getView().showUserPanel();
 			}
 		});
 		

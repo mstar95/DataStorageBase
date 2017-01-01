@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.google.gson.reflect.TypeToken;
 
+import exceptions.DaoException;
 import model.DataStorage;
 
 public class DataStorageDaoImpl extends GenericDaoImpl<DataStorage> implements DataStorageDao
@@ -17,14 +18,14 @@ public class DataStorageDaoImpl extends GenericDaoImpl<DataStorage> implements D
 	}
 
 	@Override
-	public void add(DataStorage entity) throws Exception 
+	public void add(DataStorage entity) throws DaoException 
 	{
 		add(entity.getId(),entity);
 		
 	}
 
 	@Override
-	public void update(DataStorage entity) throws Exception {
+	public void update(DataStorage entity) throws DaoException {
 		update(entity.getId(),entity);	
 	}
 	

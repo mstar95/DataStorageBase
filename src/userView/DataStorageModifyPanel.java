@@ -15,6 +15,8 @@ import exceptions.DataStorageValuesException;
 import model.DataStorage;
 import model.Memory;
 import model.User;
+import model.DataStorage.Type;
+import model.Memory.Unit;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -33,7 +35,9 @@ public class DataStorageModifyPanel extends JPanel
 	private JTextField txtTitle,txtMemoryCapacity;
 	private JButton btnAdd,btnBack;
 	private JLabel lblInfo;
-	ButtonGroup groupMem,groupType;
+	private ButtonGroup groupMem,groupType;
+	private JRadioButton rdbtnB, rdbtnKb, rdbtnMb, rdbtnGb, rdbtnTb;
+	private JRadioButton rdbtnCd, rdbtnDvd, rdbtnFloppy, rdbtnPenDrive;
 	public DataStorageModifyPanel(int width,int height,Controller c)
 	{
 		controller = c;
@@ -43,7 +47,7 @@ public class DataStorageModifyPanel extends JPanel
 		setLayout(null);
 		setName("DataStorageModify");
 		
-		JLabel lblInformationAboutUser = new JLabel("Add user, please");
+		JLabel lblInformationAboutUser = new JLabel("Add Data Storage, please");
 		lblInformationAboutUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInformationAboutUser.setBounds(96, 11, 173, 14);
 		add(lblInformationAboutUser);
@@ -79,24 +83,30 @@ public class DataStorageModifyPanel extends JPanel
 		lblInfo.setBounds(51, 307, 262, 14);
 		add(lblInfo);
 		
-		JRadioButton rdbtnB = new JRadioButton("B");
+		rdbtnB = new JRadioButton("B");
 		rdbtnB.setBounds(27, 115, 36, 23);
+		rdbtnB.setActionCommand("B");
+		rdbtnB.setSelected(true);
 		add(rdbtnB);
 		
-		JRadioButton rdbtnKb = new JRadioButton("KB");
+		rdbtnKb = new JRadioButton("KB");
 		rdbtnKb.setBounds(68, 115, 44, 23);
+		rdbtnKb.setActionCommand("KB");
 		add(rdbtnKb);
 		
-		JRadioButton rdbtnMb = new JRadioButton("MB");
+		rdbtnMb = new JRadioButton("MB");
 		rdbtnMb.setBounds(113, 115, 44, 23);
+		rdbtnMb.setActionCommand("MB");
 		add(rdbtnMb);
 		
-		JRadioButton rdbtnGb = new JRadioButton("GB");
+		rdbtnGb = new JRadioButton("GB");
 		rdbtnGb.setBounds(158, 115, 44, 23);
+		rdbtnGb.setActionCommand("GB");
 		add(rdbtnGb);
 		
-		JRadioButton rdbtnTb = new JRadioButton("TB");
+		rdbtnTb = new JRadioButton("TB");
 		rdbtnTb.setBounds(201, 115, 44, 23);
+		rdbtnTb.setActionCommand("TB");
 		add(rdbtnTb);
 		
 		groupMem = new ButtonGroup();
@@ -110,20 +120,25 @@ public class DataStorageModifyPanel extends JPanel
 		lblType.setBounds(27, 145, 46, 14);
 		add(lblType);
 		
-		JRadioButton rdbtnCd = new JRadioButton("CD");
+		rdbtnCd = new JRadioButton("CD");
 		rdbtnCd.setBounds(27, 173, 44, 23);
+		rdbtnCd.setActionCommand("CD");
+		rdbtnCd.setSelected(true);
 		add(rdbtnCd);
 		
-		JRadioButton rdbtnDvd = new JRadioButton("DVD");
+		rdbtnDvd = new JRadioButton("DVD");
 		rdbtnDvd.setBounds(83, 173, 57, 23);
+		rdbtnDvd.setActionCommand("DVD");
 		add(rdbtnDvd);
 		
-		JRadioButton rdbtnFloppy = new JRadioButton("FLOPPY");
+		rdbtnFloppy = new JRadioButton("FLOPPY");
 		rdbtnFloppy.setBounds(145, 173, 57, 23);
+		rdbtnFloppy.setActionCommand("FLOPPY");
 		add(rdbtnFloppy);
 		
-		JRadioButton rdbtnPenDrive = new JRadioButton("PENDRIVE");
+		rdbtnPenDrive = new JRadioButton("PENDRIVE");
 		rdbtnPenDrive.setBounds(212, 173, 77, 23);
+		rdbtnPenDrive.setActionCommand("PENDRIVE");
 		add(rdbtnPenDrive);
 		
 		groupType = new ButtonGroup();
@@ -147,16 +162,15 @@ public class DataStorageModifyPanel extends JPanel
 				}
 				if(memoryCapacitystr.equals(""))
 				{
-					lblInfo.setText("MemoryCapacitystr is blank");
+					lblInfo.setText("Memory Capacity is blank");
 					return;
 				}
 				try {
 					float memoryCapacityAmount = new Float(memoryCapacitystr);
-					Optional<Memory.Unit> unitOptional = Memory.StringToUnit(groupMem.getSelection().toString());
+					Optional<Memory.Unit> unitOptional = Memory.StringToUnit(groupMem.getSelection().getActionCommand());
 					Memory memory = new Memory(memoryCapacityAmount,unitOptional
 							.orElseThrow(() -> new DataStorageValuesException("Wrong unit type")));
-					
-					Optional<DataStorage.Type> typeOptional = DataStorage.StringToType(groupType.getSelection().toString());
+					Optional<DataStorage.Type> typeOptional = DataStorage.StringToType(groupType.getSelection().getActionCommand());
 					DataStorage.Type type = typeOptional
 							.orElseThrow(() -> new DataStorageValuesException("Wrong Data Storage type"));
 					if(modify)
@@ -164,6 +178,8 @@ public class DataStorageModifyPanel extends JPanel
 						dataStorage.setTitle(title);
 						dataStorage.setMemoryCapacity(memory);
 						dataStorage.setType(type);
+						dataStorage.setMemoryUsed(new Memory(0,Memory.Unit.B));
+						controller.clearDataStorage(dataStorage);
 						controller.updateDataStorage(dataStorage);
 					}
 					else
@@ -173,14 +189,15 @@ public class DataStorageModifyPanel extends JPanel
 					}
 				} catch (ControllerException | DataStorageValuesException e1) {
 					lblInfo.setText(e1.getMessage());
-					
+				} catch (NumberFormatException  e1) {
+					lblInfo.setText("wrong Memory Capacity format");
 				}
 				}
 		});
 		
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.getView().showAdminPanel();
+				controller.getView().showUserPanel();
 			}
 		});
 	}
@@ -189,11 +206,10 @@ public class DataStorageModifyPanel extends JPanel
 	{
 		modify = true;
 		this.dataStorage = dataStorage;
-		this.dataStorage = dataStorage;
 		txtTitle.setText(dataStorage.getTitle());
 		txtMemoryCapacity.setText(dataStorage.getMemoryCapacity().getAmount()+"");
-		
-		
+		setType(dataStorage.getType());
+		setMemUnit(dataStorage.getMemoryCapacity().getUnit());
 	}
 	
 	public void resetVariables()
@@ -201,5 +217,49 @@ public class DataStorageModifyPanel extends JPanel
 		modify = false;
 		txtTitle.setText("");
 		txtMemoryCapacity.setText("");
+		rdbtnB.setSelected(true);
+		rdbtnCd.setSelected(true);
 	}
+	
+	private void setType(DataStorage.Type t)
+	{
+		switch(t.toString())
+		{
+			case "FLOPPY":
+				rdbtnFloppy.setSelected(true);
+				break;
+			case "CD":
+				rdbtnCd.setSelected(true);
+				break;
+			case "DVD":
+				rdbtnDvd.setSelected(true);
+				break;
+			case "PENDRIVE":
+				rdbtnPenDrive.setSelected(true);
+				break;
+		}
+	}
+	
+	private void setMemUnit(Memory.Unit u)
+	{
+		switch(u.toString())
+		{
+			case "B":
+				rdbtnB.setSelected(true);
+				break;
+			case "KB":
+				rdbtnKb.setSelected(true);
+				break;
+			case "MB":
+				rdbtnMb.setSelected(true);
+				break;
+			case "GB":
+				rdbtnGb.setSelected(true);
+				break;
+			case "TB":
+				rdbtnTb.setSelected(true);
+				break;
+		}
+	}
+	
 }

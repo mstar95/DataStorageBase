@@ -1,0 +1,7 @@
+# !SESSION 2016-12-31 15:11:09.418
+# version: 1.1
+# verbose: true
+# The following option strings are specified for this debug session:
+# 	com.ibm.xtools.comparemerge.team/debug=false
+| main | 2016-12-31 15:11:09.418 | org.eclipse.e4.ui.workbench | /debug | org.eclipse.e4.core.services.log.Logger | debug | 46 | Rendering returned null |
+| main | 2016-12-31 15:11:10.168 | org.eclipse.e4.ui.workbench | /debug | org.eclipse.e4.core.services.log.Logger | debug | 46 | Rendering returned null |

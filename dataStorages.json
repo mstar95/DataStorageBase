@@ -1,15 +1,28 @@
 {
   "0": {
     "id": 0,
-    "title": "XD",
+    "title": "sony",
     "memoryCapacity": {
-      "amount": 976.5625,
-      "unit": "KB"
+      "amount": 2.0,
+      "unit": "GB"
     },
     "memoryUsed": {
-      "amount": 0.0,
-      "unit": "B"
+      "amount": 30.0,
+      "unit": "KB"
     },
-    "type": "CD"
+    "type": "PENDRIVE"
+  },
+  "1": {
+    "id": 1,
+    "title": "abc",
+    "memoryCapacity": {
+      "amount": 100.0,
+      "unit": "GB"
+    },
+    "memoryUsed": {
+      "amount": 20.0,
+      "unit": "MB"
+    },
+    "type": "DVD"
   }
 }

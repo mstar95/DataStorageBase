@@ -22,7 +22,7 @@ import model.User;
 
 public class UserPanel extends JPanel implements ListSelectionListener
 {
-private Controller controller;
+	private Controller controller;
 	
 	private Map<Integer,DataStorage> dataStorages;
 	private DefaultListModel<DataStorage> listModel;
@@ -31,6 +31,8 @@ private Controller controller;
 	private JButton btnNewDataStorage, btnDeleteDataStorage,btnDataStorageInfo,btnLogout,btnModifyDataStorage;
 	private JList list;
 	private JLabel lblInfo;
+	private JButton btnNewData;
+	private JButton btnShowSavedData;
 
 	public UserPanel(int width,int height,Controller c)
 	{
@@ -51,35 +53,43 @@ private Controller controller;
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnNewDataStorage.setBounds(10, 303, 101, 37);
+		btnNewDataStorage.setBounds(10, 270, 101, 37);
 		add(btnNewDataStorage);
 		
 		btnDeleteDataStorage = new JButton("<html>Delete<br/><span>DataStorage</span></html>");
-		btnDeleteDataStorage.setBounds(121, 303, 106, 37);
+		btnDeleteDataStorage.setBounds(121, 270, 106, 37);
 		add(btnDeleteDataStorage);
 		
 		btnDataStorageInfo = new JButton("<html>DataStorage<br /><span>Info</span></html>");
-		btnDataStorageInfo.setBounds(10, 351, 101, 41);
+		btnDataStorageInfo.setBounds(10, 318, 101, 41);
 		add(btnDataStorageInfo);
 		
 		listModel = new DefaultListModel<DataStorage>();
 		list = new JList<DataStorage>(listModel);
-		list.setBounds(43, 50, 260, 209);
+		list.setBounds(43, 50, 260, 185);
 		updateList();
 		add(list);
 		
 		btnLogout = new JButton("Logout");
-		btnLogout.setBounds(121, 351, 106, 41);
+		btnLogout.setBounds(10, 370, 348, 23);
 		add(btnLogout);
 		
 		btnModifyDataStorage = new JButton("<html>Modify<br /><span>DataStorage</span></html>");
-		btnModifyDataStorage.setBounds(237, 303, 121, 37);
+		btnModifyDataStorage.setBounds(237, 270, 121, 37);
 		add(btnModifyDataStorage);
 		
 		lblInfo = new JLabel("");
 		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfo.setBounds(43, 270, 260, 14);
+		lblInfo.setBounds(43, 246, 260, 14);
 		add(lblInfo);
+		
+		btnNewData = new JButton("New Data");
+		btnNewData.setBounds(121, 318, 106, 39);
+		add(btnNewData);
+		
+		btnShowSavedData = new JButton("<html>Show<br /><span>Saved Data</span></html>");
+		btnShowSavedData.setBounds(237, 320, 121, 39);
+		add(btnShowSavedData);
 	}
 	
 	public void setupListeners()
@@ -97,6 +107,7 @@ private Controller controller;
 				DataStorage dataStorage = (DataStorage)list.getSelectedValue();
 				
 				try {
+					controller.clearDataStorage(dataStorage);
 					controller.deleteDataStorage(dataStorage);
 					updateList();
 				} catch (DaoException e1) {
@@ -127,14 +138,40 @@ private Controller controller;
 				if(checkIfValueIsSelected() == false)
 					return;
 				DataStorage dataStorage = (DataStorage)list.getSelectedValue();
-				
-				//controller.getView().showUserModifyPanel(user);
+				controller.getView().showDataStorageModifyPanel(dataStorage);
 			}
 		});
 		
+		btnShowSavedData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkIfValueIsSelected() == false)
+				{
+					controller.getView().showDataListPanel();
+				}
+				else
+				{
+					DataStorage dataStorage = (DataStorage)list.getSelectedValue();
+					controller.getView().showDataListPanel(dataStorage);
+				}
+			}
+		});
+		
+		btnNewData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkIfValueIsSelected() == false)
+					{
+						controller.getView().showDataModifyPanel();
+					}
+				else
+				{
+					DataStorage dataStorage = (DataStorage)list.getSelectedValue();
+					controller.getView().showDataModifyPanel(dataStorage);
+				}
+			}
+		});
 	};
 	
-	public void updateList()
+	private void updateList()
 	{
 		dataStorages = controller.getDataStorages();
 		listModel.clear();
@@ -151,6 +188,12 @@ private Controller controller;
 			list.ensureIndexIsVisible(index);
 		}
 	}
+	public void update()
+	{
+		updateList();
+		lblInfo.setText(" ");
+	}
+	
 
 	public boolean checkIfValueIsSelected()
 	{

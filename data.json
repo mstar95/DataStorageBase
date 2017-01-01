@@ -1,0 +1,22 @@
+{
+  "0": {
+    "id": 0,
+    "dataStorageId": 0,
+    "name": "popek",
+    "extension": "mp3",
+    "size": {
+      "amount": 30.0,
+      "unit": "KB"
+    }
+  },
+  "2": {
+    "id": 2,
+    "dataStorageId": 1,
+    "name": "Lords",
+    "extension": "mp4",
+    "size": {
+      "amount": 20.0,
+      "unit": "MB"
+    }
+  }
+}

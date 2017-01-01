@@ -8,8 +8,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import controller.Controller;
+import model.Data;
 import model.DataStorage;
 import model.User;
+import userView.DataListPanel;
+import userView.DataModifyPanel;
 import userView.DataStorageInfoPanel;
 import userView.DataStorageModifyPanel;
 import userView.UserPanel;
@@ -32,6 +35,8 @@ public class View
 	private UserPanel userPanel;
 	private DataStorageInfoPanel dataStorageInfoPanel;
 	private DataStorageModifyPanel dataStorageModifyPanel;
+	private DataListPanel dataListPanel;
+	private DataModifyPanel dataModifyPanel;
 	
 	CardLayout cardLayout;
 	
@@ -64,6 +69,8 @@ public class View
 		userPanel = new UserPanel(WIDTH,HEIGHT,controller);
 		dataStorageInfoPanel = new DataStorageInfoPanel(WIDTH,HEIGHT,controller);
 		dataStorageModifyPanel = new DataStorageModifyPanel(WIDTH,HEIGHT,controller);
+		dataListPanel = new DataListPanel(WIDTH,HEIGHT,controller);
+		dataModifyPanel = new DataModifyPanel(WIDTH,HEIGHT,controller);
 		
 		contentPanel.add(loginPanel,loginPanel.getName());
 		contentPanel.add(adminPanel,adminPanel.getName());
@@ -72,7 +79,9 @@ public class View
 		contentPanel.add(userPanel,userPanel.getName());
 		contentPanel.add(dataStorageInfoPanel,dataStorageInfoPanel.getName());
 		contentPanel.add(dataStorageModifyPanel,dataStorageModifyPanel.getName());
-	
+		contentPanel.add(dataListPanel,dataListPanel.getName());
+		contentPanel.add(dataModifyPanel,dataModifyPanel.getName());
+		
 		//cardLayout.show(contentPanel, "Admin");
 		cardLayout.show(contentPanel, "User");
 		frame.pack();
@@ -88,6 +97,8 @@ public class View
 		userPanel.setupListeners();
 		dataStorageInfoPanel.setupListeners();
 		dataStorageModifyPanel.setupListeners();
+		dataListPanel.setupListeners();
+		dataModifyPanel.setupListeners();
 	}
 	
 	public void showLoginPanel()
@@ -115,6 +126,7 @@ public class View
 	
 	public void showUserPanel()
 	{
+		userPanel.update();
 		cardLayout.show(contentPanel, userPanel.getName());
 	}
 	
@@ -152,5 +164,35 @@ public class View
 	{
 		dataStorageModifyPanel.setVariables(dataStorage);
 		cardLayout.show(contentPanel, dataStorageModifyPanel.getName());
+	}
+	
+	public void showDataListPanel()
+	{
+		dataListPanel.update();
+		cardLayout.show(contentPanel, dataListPanel.getName());
+	}
+	
+	public void showDataListPanel(DataStorage dataStorage)
+	{
+		dataListPanel.update(dataStorage);
+		cardLayout.show(contentPanel, dataListPanel.getName());
+	}
+	
+	public void showDataModifyPanel()
+	{
+		dataModifyPanel.resetVariables();
+		cardLayout.show(contentPanel, dataModifyPanel.getName());
+	}
+	
+	public void showDataModifyPanel(DataStorage dataStorage)
+	{
+		dataModifyPanel.setVariables(dataStorage);
+		cardLayout.show(contentPanel, dataModifyPanel.getName());
+	}
+	
+	public void showDataModifyPanel(Data data)
+	{
+		dataModifyPanel.setVariables(data);
+		cardLayout.show(contentPanel, dataModifyPanel.getName());
 	}
 }

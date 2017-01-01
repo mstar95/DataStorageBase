@@ -2,8 +2,12 @@ package model;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import model.DataStorage.Type;
 
+@Setter
 @Getter
 public class Memory 
 {
